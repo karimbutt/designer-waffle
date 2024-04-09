@@ -4,6 +4,7 @@ export interface AuthResponseDto {
     email: string;
     firstName: string;
     lastName: string;
+    timezone: string;
   };
   token: string;
 }
