@@ -1,7 +1,7 @@
 // src/api/notesApi.ts
 import RootStore from '../../../stores/root.store';
 import AppApi from '../app-api';
-import { INote } from '../../../entities/note.entity';
+import { INote, INoteBase } from '../../../entities/note.entity';
 
 export default class NotesApi {
   constructor(
@@ -9,7 +9,7 @@ export default class NotesApi {
     private store: RootStore
   ) {}
 
-  async createNote(noteData: INote) {
+  async createNote(noteData: INoteBase) {
     try {
       const response = await this.api.client.post<INote>('/notes', noteData);
       this.store.noteStore.loadNote(response.data.id, response.data);
@@ -40,8 +40,11 @@ export default class NotesApi {
         if (params.startDate) queryParams.append('startDate', params.startDate);
         if (params.endDate) queryParams.append('endDate', params.endDate);
       }
-      const response = await this.api.client.get<INote[]>(`/notes?${queryParams.toString()}`);
-      this.store.noteStore.loadNotes(response.data.map((note) => note));
+      const response = await this.api.client.get<[INote[], number]>(
+        `/notes?${queryParams.toString()}`
+      );
+      console.log(response.data[0]);
+      this.store.noteStore.loadNotes(response.data[0]);
       return response.data;
     } catch (error) {
       console.error('Get all notes failed:', error);

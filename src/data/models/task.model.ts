@@ -29,11 +29,4 @@ export default class Task implements ITask {
       .map((id) => this.store.contactStore.contactsById.get(id))
       .filter((contact) => contact);
   }
-
-  // Relationship to fetch related interaction, if exists
-  get interaction() {
-    return this.interactionId
-      ? this.store.interactionStore.interactionsById.get(this.interactionId)
-      : null;
-  }
 }

@@ -4,6 +4,6 @@ export interface INote extends INoteBase {
 
 export interface INoteBase {
   contactId: string;
-  textBody: string;
-  interactionId?: string;
+  title: string;
+  body: string;
 }

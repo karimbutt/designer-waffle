@@ -3,8 +3,8 @@ export interface IUser extends IUserBase {
 }
 
 export interface IUserBase {
-  firstName: string;
-  lastName: string;
+  // firstName: string;
+  // lastName: string;
   email: string;
-  timezone: string;
+  // timezone: string;
 }
