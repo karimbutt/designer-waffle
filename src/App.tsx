@@ -3,11 +3,12 @@ import RootStore from './data/stores/root.store';
 import AppApi from './data/services/api/app-api';
 import AppContext from './context/app-context';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import LoginPage from './ui/pages/LoginPage';
 import MainPage from './ui/pages/MainPage';
 import { isAuthenticated } from './utils/isAuthenticated';
 import { ROUTES } from './utils/routes';
 import { SignupPage } from './ui/pages/SignupPage';
+import { LoginPage } from './ui/pages/LoginPage';
+import { CreateNotePage } from './ui/pages/CreateNotePage';
 
 const store = new RootStore();
 const api = new AppApi(store);
@@ -33,6 +34,14 @@ function App() {
             element={
               <RequireAuth>
                 <MainPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={ROUTES.CREATE_NOTE}
+            element={
+              <RequireAuth>
+                <CreateNotePage />
               </RequireAuth>
             }
           />

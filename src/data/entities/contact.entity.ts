@@ -7,10 +7,11 @@ export interface IContactBase {
   firstName: string;
   lastName: string;
   birthday?: string;
-  // phones?: IPhoneNumber[];
-  // emails?: IEmail[];
-  // address?: IAddress;
 }
+
+// phones?: IPhoneNumber[];
+// emails?: IEmail[];
+// address?: IAddress;
 
 // export interface IEmail extends IEmailBase {
 //   id?: string;

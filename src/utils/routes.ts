@@ -2,5 +2,6 @@ export const ROUTES = {
   MAIN: '/',
   LOGIN: '/login',
   SIGNUP: '/signup',
-  VIEWCONTACT: '/contact/:contactId'
+  FORGOT_PASSWORD: '/forgot-password',
+  CREATE_NOTE: 'notes/new',
 };

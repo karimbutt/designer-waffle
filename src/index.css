@@ -15,3 +15,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+:root {
+  /* Apply dark theme colors as default */
+  background-color: #0f1011;
+}
+
+/* Ensure all text uses the light color for readability */
+body, button, input, textarea {
+  color: inherit;
+}

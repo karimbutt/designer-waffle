@@ -18,7 +18,7 @@ export default class UserStore {
     if (this.currentUser) {
       const updatedUser = {
         ...this.currentUser,
-        ...updatedUserData
+        ...updatedUserData,
       };
       this.currentUser = new User(this.rootStore, updatedUser);
     }

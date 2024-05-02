@@ -6,8 +6,8 @@ import { logout } from '../../../utils/isAuthenticated';
 export const axiosClient = axios.create({
   baseURL: `${process.env.REACT_APP_API_DOMAIN}/v1`, // This should be the base URL of your API
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 // Interceptor to insert the JWT token in requests when available
@@ -21,7 +21,7 @@ axiosClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Optional: Interceptor to handle responses or errors globally
@@ -40,7 +40,7 @@ axiosClient.interceptors.response.use(
       window.location.href = '/login';
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosClient;

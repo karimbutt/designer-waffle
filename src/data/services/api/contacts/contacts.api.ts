@@ -6,7 +6,7 @@ import { IContactBase, IContact } from '../../../entities/contact.entity';
 export default class ContactsApi {
   constructor(
     private api: AppApi,
-    private store: RootStore
+    private store: RootStore,
   ) {}
 
   async createContact(contactData: IContactBase) {
@@ -45,7 +45,7 @@ export default class ContactsApi {
   async updateContact(contactId: string, contactData: IContactBase) {
     try {
       const response = await this.api.client.put<IContact>(`/contacts/${contactId}`, contactData);
-      this.store.contactStore.updateContact(response.data);
+      this.store.contactStore.updateContact(contactId, response.data);
       return response.data;
     } catch (error) {
       console.error('Update contact failed:', error);

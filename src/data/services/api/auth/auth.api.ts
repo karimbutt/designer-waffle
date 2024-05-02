@@ -7,7 +7,7 @@ import { LoginRequestDto } from './dto/login-request.dto';
 export default class AuthApi {
   constructor(
     private api: AppApi,
-    private store: RootStore
+    private store: RootStore,
   ) {}
 
   async signUp(userData: IUserBase) {

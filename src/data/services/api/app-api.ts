@@ -4,19 +4,19 @@ import RootStore from '../../stores/root.store';
 import AuthApi from './auth/auth.api';
 import ContactsApi from './contacts/contacts.api';
 import NotesApi from './notes/notes.api';
-import TasksApi from './tasks/tasks.api';
+import RawInputsApi from './raw-inputs/raw-inputs.api';
 
 export default class AppApi {
   public client = axiosClient;
   public auth: AuthApi;
   public contacts: ContactsApi;
   public notes: NotesApi;
-  public tasks: TasksApi;
+  public rawInputs: RawInputsApi;
 
   constructor(store: RootStore) {
     this.auth = new AuthApi(this, store);
     this.contacts = new ContactsApi(this, store);
     this.notes = new NotesApi(this, store);
-    this.tasks = new TasksApi(this, store);
+    this.rawInputs = new RawInputsApi(this);
   }
 }

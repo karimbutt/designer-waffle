@@ -10,7 +10,7 @@ export default class User implements IUser {
 
   constructor(
     private store: RootStore,
-    user: IUser
+    user: IUser,
   ) {
     this.id = user.id;
     // this.firstName = user.firstName;

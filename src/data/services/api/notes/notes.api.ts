@@ -6,13 +6,13 @@ import { INote, INoteBase } from '../../../entities/note.entity';
 export default class NotesApi {
   constructor(
     private api: AppApi,
-    private store: RootStore
+    private store: RootStore,
   ) {}
 
   async createNote(noteData: INoteBase) {
     try {
       const response = await this.api.client.post<INote>('/notes', noteData);
-      this.store.noteStore.loadNote(response.data.id, response.data);
+      this.store.noteStore.setNote(response.data.id, response.data);
       return response.data;
     } catch (error) {
       console.error('Create note failed:', error);
@@ -41,10 +41,9 @@ export default class NotesApi {
         if (params.endDate) queryParams.append('endDate', params.endDate);
       }
       const response = await this.api.client.get<[INote[], number]>(
-        `/notes?${queryParams.toString()}`
+        `/notes?${queryParams.toString()}`,
       );
-      console.log(response.data[0]);
-      this.store.noteStore.loadNotes(response.data[0]);
+      this.store.noteStore.setNotes(response.data[0]);
       return response.data;
     } catch (error) {
       console.error('Get all notes failed:', error);
@@ -55,7 +54,7 @@ export default class NotesApi {
   async getNoteById(noteId: string) {
     try {
       const response = await this.api.client.get<INote>(`/notes/${noteId}`);
-      this.store.noteStore.loadNote(noteId, response.data);
+      this.store.noteStore.setNote(noteId, response.data);
       return response.data;
     } catch (error) {
       console.error('Get note failed:', error);

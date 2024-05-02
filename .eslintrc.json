@@ -7,18 +7,29 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:react/recommended",
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended"  // Ensures Prettier rules are run as ESLint rules
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
     },
     "plugins": [
         "@typescript-eslint",
         "react"
     ],
     "rules": {
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "prettier/prettier": ["error", {
+            "semi": true,
+            "tabWidth": 2,
+            "printWidth": 100,
+            "singleQuote": true,
+            "trailingComma": "all",
+            "jsxBracketSameLine": true
+        }]
     }
 }

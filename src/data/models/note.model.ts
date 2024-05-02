@@ -9,7 +9,7 @@ export default class Note implements INote {
 
   constructor(
     private store: RootStore,
-    note: INote
+    note: INote,
   ) {
     this.id = note.id;
     this.title = note.title;
@@ -19,6 +19,6 @@ export default class Note implements INote {
 
   // Relationship to fetch related contact
   get contact() {
-    return this.store.contactStore.contactsById.get(this.contactId);
+    return this.store.contactStore.byId.get(this.contactId);
   }
 }

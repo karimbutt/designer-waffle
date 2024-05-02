@@ -4,8 +4,8 @@ import { IContact } from '../entities/contact.entity';
 import Contact from '../models/contact.model';
 
 export default class ContactStore {
-  currentSelectedContact: IContact | null = null;
-  contactsById = observable.map<string, IContact>();
+  currentSelectedContact: Contact | null = null;
+  byId = observable.map<string, Contact>();
 
   constructor(private rootStore: RootStore) {
     makeAutoObservable(this, {}, { autoBind: true });
@@ -13,27 +13,32 @@ export default class ContactStore {
 
   loadContacts(contacts: IContact[]) {
     contacts.forEach((contact) => {
-      this.contactsById.set(contact.id, contact);
+      this.byId.set(contact.id, new Contact(this.rootStore, contact));
     });
   }
 
   loadContact(contactId: string, contact: IContact) {
-    this.contactsById.set(contactId, contact);
+    this.byId.set(contact.id, new Contact(this.rootStore, contact));
   }
 
-  updateContact(contact: IContact) {
-    const existingContact = this.contactsById.get(contact.id);
-    if (existingContact) {
-      this.contactsById.set(contact.id, { ...existingContact, ...contact });
-    }
+  updateContact(id: string, updated: IContact) {
+    // TODO: In the future, creating a new instance of an object and updating a collection (like observable.map) is more resource-intensive than merely updating existing properties
+    // Remove the existing note
+    this.byId.delete(id);
+
+    // Create a new Note instance with the updated properties
+    const newNote = new Contact(this.rootStore, updated);
+
+    // Add the updated note back into the map
+    this.byId.set(id, newNote);
   }
 
   deleteContact(contactId: string) {
-    this.contactsById.delete(contactId);
+    this.byId.delete(contactId);
   }
 
   get contacts() {
-    return Array.from(this.contactsById.values());
+    return Array.from(this.byId.values());
   }
 
   loadCurrentSelectedContact(contactData: IContact) {
