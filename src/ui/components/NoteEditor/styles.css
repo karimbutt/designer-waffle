@@ -1,18 +1,18 @@
 /* styles.css */
 .bn-container[data-custom-editor] .bn-editor h1 {
-  font-size: 1.875rem; /* text-heading1 */
+  font-size: 1.5rem; /* text-heading1 */
   font-weight: 600; /* font-semibold */
   line-height: 1.3; /* leading-tight */
 }
 
 .bn-container[data-custom-editor] .bn-editor h2 {
-  font-size: 1.5rem; /* text-heading2 */
+  font-size: 1.2rem; /* text-heading2 */
   font-weight: 600; /* font-semibold */
   line-height: 1.3; /* leading-tight */
 }
 
 .bn-container[data-custom-editor] .bn-editor h3 {
-  font-size: 1.25rem; /* text-heading3 */
+  font-size: 1rem; /* text-heading3 */
   font-weight: 600; /* font-semibold */
   line-height: 1.3; /* leading-tight */
 }
@@ -24,25 +24,25 @@
 }
 
 .bn-container[data-custom-editor] .bn-editor .text-large {
-  font-size: 1.125rem; /* text-large */
+  font-size: 0.9rem; /* text-large */
   font-weight: 400; /* font-normal */
   line-height: 1.5; /* leading-normal */
 }
 
 .bn-container[data-custom-editor] .bn-editor .text-small {
-  font-size: 0.875rem; /* text-small */
+  font-size: 0.7rem; /* text-small */
   font-weight: 400; /* font-normal */
   line-height: 1.5; /* leading-normal */
 }
 
 .bn-container[data-custom-editor] .bn-editor .text-mini {
-  font-size: 0.75rem; /* text-mini */
+  font-size: 0.6rem; /* text-mini */
   font-weight: 400; /* font-normal */
   line-height: 1.5; /* leading-normal */
 }
 
 .bn-container[data-custom-editor] .bn-editor .text-micro {
-  font-size: 0.625rem; /* text-micro */
+  font-size: 0.5rem; /* text-micro */
   font-weight: 400; /* font-normal */
   line-height: 1.5; /* leading-normal */
 }

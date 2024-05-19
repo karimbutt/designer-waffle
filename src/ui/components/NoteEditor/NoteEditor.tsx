@@ -18,14 +18,15 @@ import SimpleAlertDialog from '../shared/SimpleAlertDialog';
 import { Text } from '../shared/Text';
 import './styles.css';
 import CustomToolbar from './CustomToolbar';
-import { BlockNoteEditor, filterSuggestionItems } from '@blocknote/core';
+import { BlockNoteEditor, filterSuggestionItems, PartialBlock } from '@blocknote/core';
 import { modifiedDarkTheme } from './modified-dark-theme';
 import { getCustomSlashMenuItems } from './get-custom-slash-menu-items';
 import { LogWorkMeeting } from '../../../constants/note-templates/log-work-meeting';
+import { NoteTemplate } from '../../../constants/note-templates/note-template.type';
 
 interface Props {
   title?: string;
-  markdownBody?: string;
+  markdownBody?: string | PartialBlock[];
   headerText: string;
   onSave: (title: string, body: string) => Promise<void>;
   initialFieldFocused?: boolean;
@@ -57,7 +58,13 @@ export const NoteEditor = ({
   useEffect(() => {
     async function loadInitialBlocks() {
       if (markdownBody) {
-        const blocks = await editor.tryParseMarkdownToBlocks(markdownBody);
+        let blocks;
+        if (typeof markdownBody == 'string') {
+          blocks = await editor.tryParseMarkdownToBlocks(markdownBody);
+        } else {
+          blocks = markdownBody;
+        }
+
         editor.replaceBlocks(editor.document, blocks);
         // Need to set this here because of the save warning that comes up. This triggers onChange
         // which then triggers the save warning if the user exits out. A bit of a hack.
@@ -166,7 +173,7 @@ export const NoteEditor = ({
             {headerText}
           </Text>
           <div className="bg-neutral-600 rounded-md py-7 shadow-lg">
-            <div className="w-full mb-4 px-12">
+            <div className="w-full mb-4 px-14">
               <textarea
                 ref={inputRef}
                 value={noteTitle}
