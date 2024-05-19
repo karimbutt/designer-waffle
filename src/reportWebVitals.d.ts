@@ -1,3 +1,3 @@
 export default function reportWebVitals(
-  onPerfEntry?: (performanceEntry: PerformanceEntry) => void
+  onPerfEntry?: (performanceEntry: PerformanceEntry) => void,
 ): void;

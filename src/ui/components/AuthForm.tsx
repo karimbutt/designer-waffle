@@ -5,12 +5,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../utils/routes';
 import TextInput from './TextInput';
-import ErrorMsg from './ErrorMsg';
-import Label from './Label';
-import Link from './Link';
-import { Logo } from './Logo';
-import { Button } from './Button';
-import { Loader } from './Loader';
+import ErrorMsg from './shared/ErrorMsg';
+import Label from './shared/Label';
+import Link from './shared/Link';
+import { Logo } from './shared/Logo';
+import { Button } from './shared/Button';
 
 interface FormValues {
   email: string;

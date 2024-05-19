@@ -1,19 +1,16 @@
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { CreateContactForm } from './CreateContactForm';
 
-interface CreateContactDialogInterface {
-  openCreateContactDialog: boolean;
-  setOpenCreateContactDialog: React.Dispatch<React.SetStateAction<boolean>>;
+interface StandardDialogInterface {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  children: React.ReactNode;
 }
 
-export const CreateContactDialog = ({
-  openCreateContactDialog,
-  setOpenCreateContactDialog,
-}: CreateContactDialogInterface) => {
+export const StandardDialog = ({ open, setOpen, children }: StandardDialogInterface) => {
   return (
-    <Transition.Root show={openCreateContactDialog} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpenCreateContactDialog}>
+    <Transition.Root show={open} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={setOpen}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -35,8 +32,8 @@ export const CreateContactDialog = ({
               leave="ease-in duration-200"
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-dark-900 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 text-text-primary">
-                <CreateContactForm setOpenCreateContactDialog={setOpenCreateContactDialog} />
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-zinc-900 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6 text-text-primary">
+                {children}
               </Dialog.Panel>
             </Transition.Child>
           </div>

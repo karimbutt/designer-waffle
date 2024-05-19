@@ -1,185 +1,84 @@
-import '@blocknote/core/fonts/inter.css';
-import { BlockNoteView, useCreateBlockNote, darkDefaultTheme, Theme } from '@blocknote/react';
-import '@blocknote/react/style.css';
-import { useHotkeys } from 'react-hotkeys-hook';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useAppContext } from '../../context/app-context';
-import { TrashIcon } from '@heroicons/react/24/outline';
-import { Button } from '../components/Button';
-import { colors } from '../../utils/colors';
-import SimpleAlertDialog from '../components/SimpleAlertDialog';
+import { NoteEditor } from '../components/NoteEditor/NoteEditor';
+import { TemplatePicker } from '../components/NoteEditor/TemplatePickerDialogue';
 
-const modifiedDarkTheme = {
-  ...darkDefaultTheme,
-  colors: {
-    ...darkDefaultTheme.colors,
-    editor: {
-      text: '#ffffff',
-      background: colors.dark.tertiary,
-    },
-    sideMenu: '#ffffff',
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    highlights: darkDefaultTheme.colors!.highlights,
-  },
-} satisfies Theme;
+type Variables = { [key: string]: string | number | Date | Variables };
+
+const replaceVariables = (template: NoteTemplate, variables: Variables): NoteTemplate => {
+  const replace = (str: string): string => {
+    return str.replace(/{(\w+(\.\w+)*)}/g, (_, key: string) => {
+      const keys = key.split('.');
+      let value: string | number | Date | Variables | undefined = variables;
+      for (const k of keys) {
+        if (typeof value === 'object' && value !== null && k in value) {
+          value = (value as Variables)[k];
+        } else {
+          value = undefined;
+          break;
+        }
+      }
+      return value !== undefined ? String(value) : `{${key}}`;
+    });
+  };
+
+  return {
+    name: template.name,
+    title: replace(template.title),
+    body: replace(template.body),
+  };
+};
 
 export const CreateNotePage = () => {
-  const editor = useCreateBlockNote();
-  const navigate = useNavigate();
   const { api, store } = useAppContext();
-  const [noteTitle, setNoteTitle] = useState<string>('');
-  const [saveWarningDialogueOpen, setSaveWarningDialogueOpen] = useState<boolean>(false);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // const goBack = useCallback(() => {
-  //   navigate(-1);
-  // }, [noteTitle, navigate, editor.document]);
+  const headerText = `New note about ${store.contacts.currentSelectedContact?.firstName} ${store.contacts.currentSelectedContact?.lastName}`;
+  const [title, setTitle] = useState<string>('');
+  const [body, setBody] = useState<undefined | string>();
 
-  const goBack = () => {
-    navigate(-1);
-  };
+  const onSave = async (title: string, body: string) => {
+    const currentContact = store.contacts.currentSelectedContact;
 
-  useHotkeys(
-    'esc',
-    (e) => {
-      e.preventDefault();
-      warnAndGoBack();
-    },
-    {
-      enableOnFormTags: true,
-      enableOnContentEditable: true,
-      enabled: !saveWarningDialogueOpen,
-    },
-    [noteTitle, navigate, editor.document],
-  );
-
-  const saveNoteAndGoBack = async () => {
-    await saveNote();
-    goBack();
-  };
-
-  // useHotkeys('meta+enter', saveNoteAndGoBack, [saveNoteAndGoBack]);
-  // useHotkeys(
-  //   'meta+s',
-  //   (event) => {
-  //     event.preventDefault(); // Prevent the default save dialog in browsers
-  //     saveNoteAndGoBack();
-  //   },
-  //   {
-  //     preventDefault: true,
-  //     enabled: () => false,
-  //     enableOnFormTags: true,
-  //     enableOnContentEditable: true,
-  //   },
-  //   [saveNoteAndGoBack],
-  // );
-
-  useEffect(() => {
-    // Timeout used in order to not have the keystroke to get to this page be included in the input field
-    const timer = setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100); // Delay focus by 100 milliseconds
-
-    return () => clearTimeout(timer); // Clean up the timer
-  }, []);
-
-  const saveNote = async () => {
-    const blocks = editor.document;
-    const markdownFromBlocks = await editor.blocksToMarkdownLossy(blocks);
-
-    const currentContact = store.contactStore.currentSelectedContact;
-
-    const titleForSave = noteTitle.trim.length > 0 ? noteTitle : 'Untitled';
-
+    const titleForSave = title.trim().length > 0 ? title : 'Untitled';
     if (currentContact) {
       await api.notes.createNote({
         contactId: currentContact.id,
-        body: markdownFromBlocks,
+        body: body,
         title: titleForSave,
       });
     }
   };
 
-  const warnAndGoBack = () => {
-    const formIsEmpty = checkIsFormEmpty();
+  const applyTemplate = (template: NoteTemplate) => {
+    const currentContact = store.contacts.currentSelectedContact;
 
-    if (!formIsEmpty) {
-      setSaveWarningDialogueOpen(true);
-    } else {
-      goBack();
-    }
-  };
+    const variables = {
+      person: {
+        firstName: currentContact?.firstName || '',
+        lastName: currentContact?.lastName || '',
+      },
+      date: {
+        today: new Date().toLocaleDateString(),
+      },
+    };
 
-  const checkIsFormEmpty = (): boolean => {
-    const blocks = editor.document;
+    const appliedTemplate = replaceVariables(template, variables);
 
-    return (
-      noteTitle.trim().length == 0 &&
-      blocks.length == 1 &&
-      blocks[0].type == 'paragraph' &&
-      blocks[0].content.length == 0
-    );
-  };
-
-  const handleNoteTitleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const target = e.target;
-    setNoteTitle(target.value);
-    target.style.height = 'auto';
-    target.style.height = `${target.scrollHeight}px`;
+    setTitle(appliedTemplate.title);
+    setBody(appliedTemplate.body);
   };
 
   return (
-    <main className="lg:px-60">
-      <div className="bg-dark-secondary p-10 h-screen">
-        <div className="bg-dark-tertiary rounded-md py-7 shadow-lg">
-          <div className="w-full mb-4 px-12">
-            <textarea
-              ref={inputRef}
-              value={noteTitle}
-              onChange={(e) => handleNoteTitleInput(e)}
-              placeholder="Title"
-              rows={1}
-              className="resize-none w-full bg-dark-tertiary focus:outline-none focus:ring-0 placeholder-text-muted caret-white text-text-primary text-heading2"
-            />
-          </div>
-          <div className="mb-5 min-h-72">
-            <BlockNoteView
-              // contentEditable={true}
-              editor={editor}
-              formattingToolbar={true}
-              theme={modifiedDarkTheme}
-            />
-          </div>
-          <div
-            className="border-t pt-3 mx-12 border-border-primary flex flex-row"
-            style={{ borderTopWidth: '0.5px' }}>
-            <div className="flex flex-1">
-              <Button type="button" variant="muted-primary" onClick={() => saveNoteAndGoBack()}>
-                Save
-              </Button>
-            </div>
-            <Button
-              className="flex"
-              type="button"
-              variant="muted-secondary"
-              onClick={() => goBack()}>
-              <TrashIcon className="h-4 w-4" aria-hidden="true" />
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <SimpleAlertDialog
-        isOpen={saveWarningDialogueOpen}
-        setIsOpen={setSaveWarningDialogueOpen}
-        title={'Save note?'}
-        bodyText="Would you like to save this note?"
-        mainButtonOnClick={saveNoteAndGoBack}
-        mainButtonText="Save"
-        secondaryButtonOnClick={goBack}
-        secondaryButtonText="Discard"
+    <>
+      <NoteEditor
+        headerText={headerText}
+        title={title}
+        markdownBody={body}
+        onSave={onSave}
+        initialFieldFocused={true}
+        applyTemplate={applyTemplate}
       />
-    </main>
+      {/* <TemplatePicker /> */}
+    </>
   );
 };

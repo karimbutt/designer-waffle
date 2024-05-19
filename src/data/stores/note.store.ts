@@ -12,7 +12,7 @@ export default class NoteStore {
 
   setNotes(notes: INote[]) {
     notes.forEach((note) => {
-      this.byId.set(note.id, new Note(this.rootStore, note)); // Assuming contactId can serve as a unique key
+      this.byId.set(note.id, new Note(this.rootStore, note));
     });
   }
 

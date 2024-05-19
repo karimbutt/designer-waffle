@@ -13,7 +13,7 @@ export default class AuthApi {
   async signUp(userData: IUserBase) {
     try {
       const response = await this.api.client.post<AuthResponseDto>(`/auth/signup`, userData);
-      this.store.userStore.loadUser(response.data.user);
+      this.store.user.loadUser(response.data.user);
       localStorage.setItem('jwtToken', response.data.token);
     } catch (error) {
       console.error('Signup failed:', error);
@@ -24,7 +24,7 @@ export default class AuthApi {
   async login(credentials: LoginRequestDto) {
     try {
       const response = await this.api.client.post<AuthResponseDto>(`/auth/login`, credentials);
-      this.store.userStore.loadUser(response.data.user);
+      this.store.user.loadUser(response.data.user);
       localStorage.setItem('jwtToken', response.data.token);
       this.api.client.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
     } catch (error) {

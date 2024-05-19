@@ -2,16 +2,19 @@ import { makeAutoObservable } from 'mobx';
 import UserStore from './user.store';
 import ContactStore from './contact.store';
 import NoteStore from './note.store';
+import UiStore from './ui.store';
 
 export default class RootStore {
-  userStore: UserStore;
-  contactStore: ContactStore;
-  noteStore: NoteStore;
+  user: UserStore;
+  contacts: ContactStore;
+  notes: NoteStore;
+  ui: UiStore;
 
   constructor() {
-    this.userStore = new UserStore(this);
-    this.contactStore = new ContactStore(this);
-    this.noteStore = new NoteStore(this);
+    this.user = new UserStore(this);
+    this.contacts = new ContactStore(this);
+    this.notes = new NoteStore(this);
+    this.ui = new UiStore(this);
     makeAutoObservable(this);
   }
 }

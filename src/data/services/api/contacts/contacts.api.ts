@@ -12,7 +12,7 @@ export default class ContactsApi {
   async createContact(contactData: IContactBase) {
     try {
       const response = await this.api.client.post<IContact>('/contacts', contactData);
-      this.store.contactStore.loadContact(response.data.id, response.data);
+      this.store.contacts.loadContact(response.data.id, response.data);
       return response.data;
     } catch (error) {
       console.error('Create contact failed:', error);
@@ -23,7 +23,7 @@ export default class ContactsApi {
   async getAllContacts() {
     try {
       const response = await this.api.client.get<IContact[]>('/contacts');
-      this.store.contactStore.loadContacts(response.data);
+      this.store.contacts.loadContacts(response.data);
       return response.data;
     } catch (error) {
       console.error('Get all contacts failed:', error);
@@ -34,7 +34,7 @@ export default class ContactsApi {
   async getContactById(contactId: string) {
     try {
       const response = await this.api.client.get<IContact>(`/contacts/${contactId}`);
-      this.store.contactStore.loadContact(response.data.id, response.data);
+      this.store.contacts.loadContact(response.data.id, response.data);
       return response.data;
     } catch (error) {
       console.error('Get contact failed:', error);
@@ -45,7 +45,7 @@ export default class ContactsApi {
   async updateContact(contactId: string, contactData: IContactBase) {
     try {
       const response = await this.api.client.put<IContact>(`/contacts/${contactId}`, contactData);
-      this.store.contactStore.updateContact(contactId, response.data);
+      this.store.contacts.updateContact(contactId, response.data);
       return response.data;
     } catch (error) {
       console.error('Update contact failed:', error);
@@ -56,7 +56,7 @@ export default class ContactsApi {
   async deleteContact(contactId: string) {
     try {
       await this.api.client.delete(`/contacts/${contactId}`);
-      this.store.contactStore.deleteContact(contactId);
+      this.store.contacts.deleteContact(contactId);
     } catch (error) {
       console.error('Delete contact failed:', error);
       throw error;

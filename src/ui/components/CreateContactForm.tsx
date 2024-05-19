@@ -1,12 +1,12 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { IContactBase } from '../../../data/entities/contact.entity';
-import { useAppContext } from '../../../context/app-context';
-import Label from '../Label';
-import TextInput from '../TextInput';
-import ErrorMsg from '../ErrorMsg';
-import { Button } from '../Button';
+import { IContactBase } from '../../data/entities/contact.entity';
+import { useAppContext } from '../../context/app-context';
+import Label from './shared/Label';
+import TextInput from './TextInput';
+import ErrorMsg from './shared/ErrorMsg';
+import { Button } from './shared/Button';
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -14,21 +14,21 @@ const validationSchema = Yup.object({
   lastName: Yup.string().required('Last name is required'),
 });
 
-// interface FormValues {
-//   firstName: string;
-//   lastName: string;
-// }
-
 interface CreateContactFormInterface {
   setOpenCreateContactDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const CreateContactForm = ({ setOpenCreateContactDialog }: CreateContactFormInterface) => {
-  const { api } = useAppContext();
+  const { api, store } = useAppContext();
   // Placeholder onSubmit handler
-  const handleSubmit = (values: IContactBase, { setSubmitting }: FormikHelpers<IContactBase>) => {
+  const handleSubmit = async (
+    values: IContactBase,
+    { setSubmitting }: FormikHelpers<IContactBase>,
+  ) => {
     try {
-      api.contacts.createContact(values);
+      const contact = await api.contacts.createContact(values);
+      store.contacts.setCurrentSelectedContact(contact.id);
+
       setOpenCreateContactDialog(false);
     } finally {
       setSubmitting(false);
@@ -42,6 +42,8 @@ export const CreateContactForm = ({ setOpenCreateContactDialog }: CreateContactF
         lastName: '',
       }}
       validationSchema={validationSchema}
+      validateOnBlur={false}
+      validateOnChange={false}
       onSubmit={handleSubmit}>
       {({ isSubmitting, resetForm, touched }) => (
         <Form>
@@ -49,7 +51,7 @@ export const CreateContactForm = ({ setOpenCreateContactDialog }: CreateContactF
             <div className="border-b border-dark-700 pb-3">
               <h2 className="text-base font-semibold text-text-primary">Add a new person</h2>
               <p className="mt-1 text-sm leading-6 text-text-secondary">
-                Enter any details you have for this new person.
+                Enter details for your new contact.
               </p>
             </div>
 

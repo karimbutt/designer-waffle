@@ -115,14 +115,18 @@ export default {
         ],
       },
       fontSize: {
-        micro: '0.6875rem',
-        mini: '0.75rem',
-        small: '0.8125rem',
-        regular: '0.9375rem',
-        large: '1.125rem',
-        heading1: '2.25rem',
-        heading2: '1.5rem',
-        heading3: '1.25rem',
+        micro: '0.625rem', // 11px, for less important, very small text
+        mini: '0.75rem', // 13px, slightly larger but still small
+        small: '0.875rem', // 15px, suitable for secondary text
+        regular: '1rem', // 17px, standard body text size
+        large: '1.125rem', // 19px, for content that needs emphasis
+        heading1: '1.875rem', // 33px, primary headings
+        heading2: '1.5rem', // 28px, secondary headings
+        heading3: '1.25rem', // 22px, tertiary headings
+      },
+      lineHeight: {
+        tight: '1.3', // Notion's line height for headers
+        normal: '1.5', // Notion's line height for normal text
       },
       fontWeight: {
         light: 300,

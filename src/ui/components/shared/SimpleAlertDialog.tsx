@@ -11,8 +11,8 @@ interface SimpleAlertDialogProps {
   bodyText: string;
   mainButtonOnClick: () => void;
   mainButtonText: string;
-  secondaryButtonOnClick: () => void;
-  secondaryButtonText: string;
+  secondaryButtonOnClick?: () => void;
+  secondaryButtonText?: string;
 }
 
 const SimpleAlertDialog: React.FC<SimpleAlertDialogProps> = ({
@@ -71,11 +71,15 @@ const SimpleAlertDialog: React.FC<SimpleAlertDialogProps> = ({
                 </div>
                 <div></div>
                 <div className="mt-5 sm:mt-4 flex justify-between items-center">
-                  <Button type="button" variant="secondary" onClick={secondaryButtonOnClick}>
-                    {secondaryButtonText}
-                  </Button>
+                  <div className="flex-grow">
+                    {secondaryButtonText && (
+                      <Button type="button" variant="secondary" onClick={secondaryButtonOnClick}>
+                        {secondaryButtonText}
+                      </Button>
+                    )}
+                  </div>
 
-                  <div className="flex space-x-3">
+                  <div className="flex space-x-3 items-end">
                     <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
                       Cancel
                     </Button>

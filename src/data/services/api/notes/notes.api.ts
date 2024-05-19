@@ -12,7 +12,7 @@ export default class NotesApi {
   async createNote(noteData: INoteBase) {
     try {
       const response = await this.api.client.post<INote>('/notes', noteData);
-      this.store.noteStore.setNote(response.data.id, response.data);
+      this.store.notes.setNote(response.data.id, response.data);
       return response.data;
     } catch (error) {
       console.error('Create note failed:', error);
@@ -43,7 +43,7 @@ export default class NotesApi {
       const response = await this.api.client.get<[INote[], number]>(
         `/notes?${queryParams.toString()}`,
       );
-      this.store.noteStore.setNotes(response.data[0]);
+      this.store.notes.setNotes(response.data[0]);
       return response.data;
     } catch (error) {
       console.error('Get all notes failed:', error);
@@ -54,7 +54,7 @@ export default class NotesApi {
   async getNoteById(noteId: string) {
     try {
       const response = await this.api.client.get<INote>(`/notes/${noteId}`);
-      this.store.noteStore.setNote(noteId, response.data);
+      this.store.notes.setNote(noteId, response.data);
       return response.data;
     } catch (error) {
       console.error('Get note failed:', error);
@@ -65,7 +65,7 @@ export default class NotesApi {
   async updateNote(noteId: string, updatedNoteData: Partial<INote>) {
     try {
       const response = await this.api.client.put<INote>(`/notes/${noteId}`, updatedNoteData);
-      this.store.noteStore.updateNote(noteId, response.data);
+      this.store.notes.updateNote(noteId, response.data);
       return response.data;
     } catch (error) {
       console.error('Update note failed:', error);
@@ -76,7 +76,7 @@ export default class NotesApi {
   async deleteNote(noteId: string) {
     try {
       await this.api.client.delete(`/notes/${noteId}`);
-      this.store.noteStore.deleteNote(noteId);
+      this.store.notes.deleteNote(noteId);
     } catch (error) {
       console.error('Delete note failed:', error);
       throw error;

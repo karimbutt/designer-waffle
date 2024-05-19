@@ -5,7 +5,7 @@ interface ButtonProps {
   type: 'button' | 'submit' | 'reset'; // Type of the button
   disabled?: boolean; // State to control the disabled attribute
   variant?: 'primary' | 'secondary' | 'muted-primary' | 'muted-secondary'; // Optional variant to switch styles
-  className?: string; // Optional additional custom styling
+  className?: React.ComponentProps<'button'>['className']; // Optional additional custom styling
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }
 

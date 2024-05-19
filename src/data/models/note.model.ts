@@ -5,7 +5,8 @@ export default class Note implements INote {
   id: string;
   contactId: string;
   title: string;
-  body: string;
+  body?: string;
+  updatedAt: Date;
 
   constructor(
     private store: RootStore,
@@ -15,10 +16,11 @@ export default class Note implements INote {
     this.title = note.title;
     this.contactId = note.contactId;
     this.body = note.body;
+    this.updatedAt = new Date(note.updatedAt);
   }
 
   // Relationship to fetch related contact
   get contact() {
-    return this.store.contactStore.byId.get(this.contactId);
+    return this.store.contacts.byId.get(this.contactId);
   }
 }

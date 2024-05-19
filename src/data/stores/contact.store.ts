@@ -22,15 +22,8 @@ export default class ContactStore {
   }
 
   updateContact(id: string, updated: IContact) {
-    // TODO: In the future, creating a new instance of an object and updating a collection (like observable.map) is more resource-intensive than merely updating existing properties
-    // Remove the existing note
-    this.byId.delete(id);
-
-    // Create a new Note instance with the updated properties
-    const newNote = new Contact(this.rootStore, updated);
-
-    // Add the updated note back into the map
-    this.byId.set(id, newNote);
+    this.byId.delete(id); // Consider updating instead of replacing
+    this.byId.set(id, new Contact(this.rootStore, updated));
   }
 
   deleteContact(contactId: string) {
@@ -38,10 +31,30 @@ export default class ContactStore {
   }
 
   get contacts() {
-    return Array.from(this.byId.values());
+    return Array.from(this.byId.values()).sort((a, b) =>
+      a.lastName.localeCompare(b.lastName, undefined, { sensitivity: 'base' }),
+    );
   }
 
-  loadCurrentSelectedContact(contactData: IContact) {
-    this.currentSelectedContact = new Contact(this.rootStore, contactData);
+  setCurrentSelectedContact(contactId: string) {
+    this.currentSelectedContact = this.byId.get(contactId) || null;
+  }
+
+  selectNextContact() {
+    const sortedContacts = this.contacts;
+    const currentIndex = sortedContacts.findIndex(
+      (contact) => contact.id === this.currentSelectedContact?.id,
+    );
+    const nextIndex = (currentIndex + 1) % sortedContacts.length; // Wrap around to the start
+    this.setCurrentSelectedContact(sortedContacts[nextIndex].id);
+  }
+
+  selectPreviousContact() {
+    const sortedContacts = this.contacts;
+    const currentIndex = sortedContacts.findIndex(
+      (contact) => contact.id === this.currentSelectedContact?.id,
+    );
+    const previousIndex = (currentIndex - 1 + sortedContacts.length) % sortedContacts.length; // Wrap around to the end
+    this.setCurrentSelectedContact(sortedContacts[previousIndex].id);
   }
 }
