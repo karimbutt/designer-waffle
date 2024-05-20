@@ -1,3 +1,4 @@
+import { PartialBlock } from '@blocknote/core';
 import { INote } from '../entities/note.entity';
 import RootStore from '../stores/root.store';
 
@@ -5,7 +6,7 @@ export default class Note implements INote {
   id: string;
   contactId: string;
   title: string;
-  body?: string;
+  body?: PartialBlock[];
   updatedAt: Date;
 
   constructor(

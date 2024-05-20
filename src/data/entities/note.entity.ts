@@ -1,3 +1,5 @@
+import { PartialBlock } from '@blocknote/core';
+
 export interface INote extends INoteBase {
   id: string;
   updatedAt: Date;
@@ -6,5 +8,5 @@ export interface INote extends INoteBase {
 export interface INoteBase {
   contactId: string;
   title: string;
-  body?: string;
+  body?: PartialBlock[];
 }

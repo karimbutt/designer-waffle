@@ -18,7 +18,7 @@ import SimpleAlertDialog from '../shared/SimpleAlertDialog';
 import { Text } from '../shared/Text';
 import './styles.css';
 import CustomToolbar from './CustomToolbar';
-import { BlockNoteEditor, filterSuggestionItems, PartialBlock } from '@blocknote/core';
+import { filterSuggestionItems, PartialBlock } from '@blocknote/core';
 import { modifiedDarkTheme } from './modified-dark-theme';
 import { getCustomSlashMenuItems } from './get-custom-slash-menu-items';
 import { LogWorkMeeting } from '../../../constants/note-templates/log-work-meeting';
@@ -26,9 +26,9 @@ import { NoteTemplate } from '../../../constants/note-templates/note-template.ty
 
 interface Props {
   title?: string;
-  markdownBody?: string | PartialBlock[];
+  body?: PartialBlock[];
   headerText: string;
-  onSave: (title: string, body: string) => Promise<void>;
+  onSave: (title: string, body: PartialBlock[]) => Promise<void>;
   initialFieldFocused?: boolean;
   onTrashClick?: () => void;
   applyTemplate?: (template: NoteTemplate) => void;
@@ -36,16 +36,26 @@ interface Props {
 
 export const NoteEditor = ({
   title,
-  markdownBody,
+  body,
   headerText,
   onSave,
   initialFieldFocused,
   onTrashClick,
   applyTemplate,
 }: Props) => {
-  const editor = useCreateBlockNote();
-  const navigate = useNavigate();
+  const [editorInitialized, setEditorInitialized] = useState<boolean>(false);
   const [noteTitle, setNoteTitle] = useState<string>(title || '');
+  const editor = useCreateBlockNote({
+    initialContent: body,
+  });
+
+  useEffect(() => {
+    if (editor) {
+      setEditorInitialized(true);
+    }
+  }, [editor]);
+
+  const navigate = useNavigate();
   const [saveWarningDialogueOpen, setSaveWarningDialogueOpen] = useState<boolean>(false);
   const [formWasChanged, setFormWasChanged] = useState<boolean>(false);
 
@@ -56,23 +66,16 @@ export const NoteEditor = ({
   };
 
   useEffect(() => {
-    async function loadInitialBlocks() {
-      if (markdownBody) {
-        let blocks;
-        if (typeof markdownBody == 'string') {
-          blocks = await editor.tryParseMarkdownToBlocks(markdownBody);
-        } else {
-          blocks = markdownBody;
-        }
-
-        editor.replaceBlocks(editor.document, blocks);
+    async function updateBlocks() {
+      if (editorInitialized && body) {
+        editor.replaceBlocks(editor.document, body);
         // Need to set this here because of the save warning that comes up. This triggers onChange
         // which then triggers the save warning if the user exits out. A bit of a hack.
         setFormWasChanged(false);
       }
     }
-    loadInitialBlocks();
-  }, [editor, markdownBody]);
+    updateBlocks();
+  }, [editorInitialized, body, editor]);
 
   useEffect(() => {
     async function loadInitialTitle() {
@@ -136,9 +139,7 @@ export const NoteEditor = ({
 
   const saveNote = async () => {
     const blocks = editor.document;
-    const markdownFromBlocks = await editor.blocksToMarkdownLossy(blocks);
-
-    await onSave(noteTitle, markdownFromBlocks);
+    await onSave(noteTitle, blocks);
   };
 
   const warnAndGoBack = () => {
@@ -168,7 +169,7 @@ export const NoteEditor = ({
         </button>
       </div>
       <div className="px-44 flex-grow">
-        <div className="bg-zinc-900 p-10 h-screen">
+        <div className="bg-zinc-900 p-10 min-h-screen">
           <Text type="heading2" className="text-neutral-300 mb-2">
             {headerText}
           </Text>

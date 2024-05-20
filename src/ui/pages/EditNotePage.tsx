@@ -3,6 +3,7 @@ import { NoteEditor } from '../components/NoteEditor/NoteEditor';
 import { useAppContext } from '../../context/app-context';
 import { useState } from 'react';
 import SimpleAlertDialog from '../components/shared/SimpleAlertDialog';
+import { PartialBlock } from '@blocknote/core';
 
 export const EditNotePage = () => {
   const { noteId } = useParams<'noteId'>();
@@ -22,7 +23,7 @@ export const EditNotePage = () => {
     return <></>;
   }
 
-  const onSave = async (title: string, body: string) => {
+  const onSave = async (title: string, body: PartialBlock[]) => {
     const titleForSave = title.trim().length > 0 ? title : 'Untitled';
 
     await api.notes.updateNote(noteId, {
@@ -52,7 +53,7 @@ export const EditNotePage = () => {
     <>
       <NoteEditor
         title={note.title}
-        markdownBody={note.body}
+        body={note.body}
         headerText={headerText}
         onSave={onSave}
         onTrashClick={() => setDeleteNoteConfirmationOpen(true)}
