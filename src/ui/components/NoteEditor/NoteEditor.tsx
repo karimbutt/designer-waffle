@@ -21,8 +21,6 @@ import CustomToolbar from './CustomToolbar';
 import { filterSuggestionItems, PartialBlock } from '@blocknote/core';
 import { modifiedDarkTheme } from './modified-dark-theme';
 import { getCustomSlashMenuItems } from './get-custom-slash-menu-items';
-import { LogWorkMeeting } from '../../../constants/note-templates/log-work-meeting';
-import { NoteTemplate } from '../../../constants/note-templates/note-template.type';
 
 interface Props {
   title?: string;
@@ -31,7 +29,9 @@ interface Props {
   onSave: (title: string, body: PartialBlock[]) => Promise<void>;
   initialFieldFocused?: boolean;
   onTrashClick?: () => void;
-  applyTemplate?: (template: NoteTemplate) => void;
+  setTemplatePickerOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  templatePickerOpen?: boolean;
+  // applyTemplate?: (template: NoteTemplate) => void;
 }
 
 export const NoteEditor = ({
@@ -41,7 +41,8 @@ export const NoteEditor = ({
   onSave,
   initialFieldFocused,
   onTrashClick,
-  applyTemplate,
+  setTemplatePickerOpen,
+  templatePickerOpen,
 }: Props) => {
   const [editorInitialized, setEditorInitialized] = useState<boolean>(false);
   const [noteTitle, setNoteTitle] = useState<string>(title || '');
@@ -93,7 +94,11 @@ export const NoteEditor = ({
     'esc',
     (e) => {
       e.preventDefault();
-      warnAndGoBack();
+      if (templatePickerOpen && setTemplatePickerOpen) {
+        setTemplatePickerOpen(false);
+      } else {
+        warnAndGoBack();
+      }
     },
     {
       enableOnFormTags: true,
@@ -124,6 +129,28 @@ export const NoteEditor = ({
       document.removeEventListener('keydown', handleKeyDown, { capture: true });
     };
   }, [saveNoteAndGoBack]);
+
+  useEffect(() => {
+    if (setTemplatePickerOpen) {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if ((event.metaKey || event.ctrlKey) && event.key === ';') {
+          event.preventDefault();
+          event.stopPropagation();
+          if (templatePickerOpen) {
+            setTemplatePickerOpen(false);
+          } else {
+            setTemplatePickerOpen(true);
+          }
+        }
+      };
+
+      document.addEventListener('keydown', handleKeyDown, { capture: true });
+
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown, { capture: true });
+      };
+    }
+  }, [templatePickerOpen]);
 
   // Focuses the title field so that the user can just start typing right away when creating a new note (but not on edit)
   useEffect(() => {
@@ -171,7 +198,7 @@ export const NoteEditor = ({
       <div className="px-44 flex-grow">
         <div className="bg-zinc-900 p-10 min-h-screen">
           <Text type="heading2" className="text-neutral-300 mb-2">
-            {headerText}
+            ✏️ {headerText}
           </Text>
           <div className="bg-neutral-600 rounded-md py-7 shadow-lg">
             <div className="w-full mb-4 px-14">
@@ -223,23 +250,23 @@ export const NoteEditor = ({
                 <Button type="button" variant="muted-primary" onClick={() => saveNoteAndGoBack()}>
                   Save
                 </Button>
-
-                {applyTemplate && (
+              </div>
+              <div className="flex flex-row justify-center">
+                {setTemplatePickerOpen && (
                   <Button
                     type="button"
-                    variant="muted-primary"
-                    onClick={() => applyTemplate(LogWorkMeeting)}>
-                    Apply Template
+                    variant="muted-secondary"
+                    onClick={() => setTemplatePickerOpen(true)}>
+                    Templates
                   </Button>
                 )}
+                <Button
+                  type="button"
+                  variant="muted-secondary"
+                  onClick={() => (onTrashClick ? onTrashClick() : warnAndGoBack())}>
+                  <TrashIcon className="h-4 w-4" aria-hidden="true" />
+                </Button>
               </div>
-              <Button
-                className="flex"
-                type="button"
-                variant="muted-secondary"
-                onClick={() => (onTrashClick ? onTrashClick() : warnAndGoBack())}>
-                <TrashIcon className="h-4 w-4" aria-hidden="true" />
-              </Button>
             </div>
           </div>
         </div>

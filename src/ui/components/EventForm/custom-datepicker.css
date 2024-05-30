@@ -1,0 +1,29 @@
+/* custom-datepicker.css */
+
+/* General styles */
+.react-datepicker {
+  @apply font-sans text-sm border border-gray-300 rounded-lg bg-white shadow-lg;
+}
+
+/* Header styles */
+.react-datepicker__header {
+  @apply bg-red-500 border-b border-gray-300 py-2 rounded-t-lg;
+}
+
+/* Navigation styles */
+.react-datepicker__navigation--previous,
+.react-datepicker__navigation--next {
+  @apply top-2 text-gray-600 hover:text-gray-800;
+}
+
+/* Day styles */
+.react-datepicker__day {
+  @apply w-10 h-10 flex items-center justify-center;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  @apply bg-blue-500 text-white;
+}
+
+/* Additional custom styles... */

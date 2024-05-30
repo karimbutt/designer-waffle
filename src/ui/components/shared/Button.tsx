@@ -20,7 +20,7 @@ export const Button = ({
   const baseClasses = 'rounded-md px-4 py-1.5 text-sm font-semibold leading-6 ';
   // shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
   const variants = {
-    primary: 'bg-indigo-600 text-text-primary hover:bg-indigo-500 focus-visible:outline-accent-300',
+    primary: 'bg-indigo-500 hover:bg-indigo-400 focus-visible:outline-accent-300',
     secondary:
       'bg-gray-100 text-gray-700 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
     'muted-primary': 'bg-transparent text-text-secondary hover:text-text-primary',

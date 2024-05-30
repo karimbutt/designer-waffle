@@ -1,0 +1,45 @@
+
+
+/* styles.css */
+.bn-container[data-template-view] .bn-editor h1 {
+  font-size: 1.125rem; /* text-heading1 */
+  font-weight: 600; /* font-semibold */
+  line-height: 0.975; /* leading-tight */
+}
+
+.bn-container[data-template-view] .bn-editor h2 {
+  font-size: 0.9rem; /* text-heading2 */
+  font-weight: 600; /* font-semibold */
+  line-height: 0.975; /* leading-tight */
+}
+
+.bn-container[data-template-view] .bn-editor h3 {
+  font-size: 0.75rem; /* text-heading3 */
+  font-weight: 600; /* font-semibold */
+  line-height: 0.975; /* leading-tight */
+}
+
+.bn-container[data-template-view] .bn-editor p {
+  font-size: 0.75rem; /* text-base */
+  font-weight: 400; /* font-normal */
+  line-height: 1.125; /* leading-normal */
+}
+
+/* Specifically target the list items */
+.bn-container[data-template-view] .bn-editor .bn-block-content[data-content-type="bulletListItem"] {
+  list-style-type: disc; /* Ensure it's a bullet list */
+}
+
+/* Target the bullet points directly */
+.bn-container[data-template-view] .bn-editor .bn-block-content[data-content-type="bulletListItem"]::before {
+  content: '•'; /* Use a bullet character */
+  font-size: 0.75rem; /* Match the font size */
+  line-height: 1.125; /* Match the line height */
+  vertical-align: top; /* Align bullets to the top of the text */
+}
+
+/* Ensure the bullets are aligned with inline content */
+.bn-container[data-template-view] .bn-editor .bn-block-content[data-content-type="bulletListItem"] .bn-inline-content {
+  display: inline-block; /* Ensure inline block for proper alignment */
+  vertical-align: top; /* Align text to the top */
+}

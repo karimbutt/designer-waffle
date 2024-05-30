@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../utils/routes';
+import { ROUTES } from '../../../constants/routes';
 
 interface Props {
   message: string;

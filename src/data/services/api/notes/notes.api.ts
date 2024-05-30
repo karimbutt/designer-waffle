@@ -43,7 +43,6 @@ export default class NotesApi {
       const response = await this.api.client.get<[INote[], number]>(
         `/notes?${queryParams.toString()}`,
       );
-      console.log(response.data[0]);
       this.store.notes.setNotes(response.data[0]);
       return response.data;
     } catch (error) {

@@ -6,4 +6,5 @@ export const ROUTES = {
   NOTES: 'notes',
   CREATE_NOTE: 'notes/new',
   EDIT_NOTE: 'notes/:noteId/edit',
+  CREATE_EVENT: 'moments/new',
 };

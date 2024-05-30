@@ -6,7 +6,7 @@ import { EmptyNoteState } from './EmptyNoteState';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import SimpleAlertDialog from '../shared/SimpleAlertDialog';
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../../utils/routes';
+import { ROUTES } from '../../../constants/routes';
 import { Text } from '../shared/Text';
 import { useCreateBlockNote } from '@blocknote/react';
 import { Note } from './Note';

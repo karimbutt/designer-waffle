@@ -4,12 +4,13 @@ import AppApi from './data/services/api/app-api';
 import AppContext from './context/app-context';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { isAuthenticated } from './utils/isAuthenticated';
-import { ROUTES } from './utils/routes';
+import { ROUTES } from './constants/routes';
 import { SignupPage } from './ui/pages/SignupPage';
 import { LoginPage } from './ui/pages/LoginPage';
 import { CreateNotePage } from './ui/pages/CreateNotePage';
 import { EditNotePage } from './ui/pages/EditNotePage';
 import { MainPage } from './ui/pages/MainPage';
+import { CreateEventPage } from './ui/pages/CreateEventPage';
 
 const store = new RootStore();
 const api = new AppApi(store);
@@ -43,6 +44,14 @@ function App() {
             element={
               <RequireAuth>
                 <CreateNotePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={ROUTES.CREATE_EVENT}
+            element={
+              <RequireAuth>
+                <CreateEventPage />
               </RequireAuth>
             }
           />

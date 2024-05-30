@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useAppContext } from '../../context/app-context';
 import { NoteEditor } from '../components/NoteEditor/NoteEditor';
-import { TemplatePicker } from '../components/NoteEditor/TemplatePickerDialogue';
 import { NoteTemplate } from '../../constants/note-templates/note-template.type';
 import { PartialBlock } from '@blocknote/core';
+import { TemplatePicker } from '../components/NoteEditor/TemplatePicker/TemplatePicker';
 
 type Variables = { [key: string]: string | number | Date | Variables };
 
@@ -48,6 +48,8 @@ const replaceVariables = (template: NoteTemplate, variables: Variables): NoteTem
     name: template.name,
     title: replace(template.title),
     body: template.body.map((block) => replaceVariablesInBlock(block, variables)),
+    category: template.category,
+    description: template.description,
   };
 };
 
@@ -57,6 +59,7 @@ export const CreateNotePage = () => {
   const headerText = `New note about ${store.contacts.currentSelectedContact?.firstName} ${store.contacts.currentSelectedContact?.lastName}`;
   const [title, setTitle] = useState<string>('');
   const [body, setBody] = useState<undefined | PartialBlock[]>();
+  const [templatePickerOpen, setTemplatePickerOpen] = useState<boolean>(false);
 
   const onSave = async (title: string, body: PartialBlock[]) => {
     const currentContact = store.contacts.currentSelectedContact;
@@ -98,9 +101,14 @@ export const CreateNotePage = () => {
         body={body}
         onSave={onSave}
         initialFieldFocused={true}
+        setTemplatePickerOpen={setTemplatePickerOpen}
+        templatePickerOpen={templatePickerOpen}
+      />
+      <TemplatePicker
+        open={templatePickerOpen}
+        setOpen={setTemplatePickerOpen}
         applyTemplate={applyTemplate}
       />
-      {/* <TemplatePicker /> */}
     </>
   );
 };

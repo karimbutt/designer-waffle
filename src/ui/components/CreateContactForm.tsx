@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { IContactBase } from '../../data/entities/contact.entity';
 import { useAppContext } from '../../context/app-context';
 import Label from './shared/Label';
-import TextInput from './TextInput';
+import TextInput from './shared/TextInput';
 import ErrorMsg from './shared/ErrorMsg';
 import { Button } from './shared/Button';
 

@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
-import { colors } from './src/utils/colors';
+import { colors } from './src/constants/colors';
 
 export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'], // adapt this line to match the file paths in your project

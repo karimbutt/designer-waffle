@@ -2,6 +2,8 @@ import { makeAutoObservable } from 'mobx';
 import { IContact } from '../entities/contact.entity';
 import { INote } from '../entities/note.entity';
 import RootStore from '../stores/root.store';
+import { EventsGroupedByDate, groupEventsByDate } from '../stores/event.store';
+import { IEvent } from '../entities/event.entity';
 
 export default class Contact implements IContact {
   id: string;
@@ -29,6 +31,14 @@ export default class Contact implements IContact {
     return this.store.notes.notes
       .filter((note) => note.contactId === this.id)
       .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+  }
+
+  get eventsByDate(): EventsGroupedByDate {
+    return groupEventsByDate(this.events);
+  }
+
+  get events(): IEvent[] {
+    return this.store.events.all.filter((e) => e.contactId == this.id);
   }
 
   selectNextNote() {
